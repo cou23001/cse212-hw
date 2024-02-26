@@ -1,3 +1,5 @@
+using System.Globalization;
+
 public static class ArraysTester {
     /// <summary>
     /// Entry point for the tests
@@ -39,7 +41,20 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        // declare array where multiples will be stored of size length and type double
+        double[] multiples = new double[length];
+
+        // initialize multiple value with supplied number
+        double mult = number;
+        // loop thru the multiples array
+        for (int i = 0; i < length; i++) {
+            // store the multiple value to the i position in the array
+            multiples[i] = mult;
+            // increment the multiple value by adding the supplied number
+            mult += number;
+        }
+
+        return multiples; // return the array of multiples
     }
     
     /// <summary>
@@ -57,5 +72,31 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-    }
+        /*
+        -- Solution 1. Working as an array
+        // variable to store value of position before is modified
+        int temp = 0;
+        // times to rotate right
+        for (int i = 0; i < amount; i++) 
+        {   
+            // store last element of array temporaly
+            temp = data[data.Count - 1];
+            // copy the last - 1 to the last 
+            for (int j = data.Count - 1; j > 0; j--) 
+            {
+                data[j] = data[j - 1];
+            }
+            // store first element with the last
+            data[0] = temp;
+        }
+        */
+        // Solution  2. Working as a List
+        // Storing in temp the range to be moved to the beggining
+        List<int> temp = data.GetRange(data.Count - amount, amount);
+        // Remove the elements stored in temp from the list data
+        data.RemoveRange(data.Count - amount, amount);
+        // Insert the temp data to the beggining of the list
+        data.InsertRange(0,temp);        
+    } 
+    
 }
