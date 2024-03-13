@@ -2,12 +2,15 @@
     public static void Run() {
         var test1 = "abcdefghjiklmnopqrstuvwxyz"; // Expect True because all letters unique
         Console.WriteLine(AreUniqueLetters(test1));
+        Console.WriteLine(AreUniqueLettersTwo(test1));
 
         var test2 = "abcdefghjiklanopqrstuvwxyz"; // Expect False because 'a' is repeated
         Console.WriteLine(AreUniqueLetters(test2));
+        Console.WriteLine(AreUniqueLettersTwo(test2));
 
         var test3 = "";
         Console.WriteLine(AreUniqueLetters(test3)); // Expect True because its an empty string
+        Console.WriteLine(AreUniqueLettersTwo(test3));
     }
 
     /// <summary>Determine if there are any duplicate letters in the text provided</summary>
@@ -23,6 +26,19 @@
             }
         }
 
+        return true;
+    }
+
+    private static bool AreUniqueLettersTwo(string text) {
+        // TODO Problem 1 - Replace the O(n^2) algorithm to use sets and O(n) efficiency
+        var eval = new HashSet<string>();
+
+        foreach (var letter in text) {
+            if (eval.Contains(letter.ToString()))
+                return false;
+            eval.Add(letter.ToString());
+        }
+       
         return true;
     }
 }

@@ -108,9 +108,30 @@ public static class SetsAndMapsTester {
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     private static void DisplayPairs(string[] words) {
-        // To display the pair correctly use something like:
-        // Console.WriteLine($"{word} & {pair}");
-        // Each pair of words should displayed on its own line.
+     
+        // Create a set to store the words
+        var seenWords = new HashSet<string>();
+        
+        // Loop the words char by char
+        foreach (string word in words)
+        {
+            // Read the first and second char
+            char firstChar = word[0];
+            char secondChar = word[1];
+
+            // Swap the char to have a reversed word
+            string revWord = string.Concat(secondChar,firstChar);
+
+            // Check if the set contains the reversed word, if so, print the word and reversed
+            if (seenWords.Contains(revWord))
+            {
+                Console.WriteLine($"{word} & {revWord}");
+            }
+
+            // Add the word to the set
+            seenWords.Add(word);
+        }
+
     }
 
     /// <summary>
@@ -131,9 +152,19 @@ public static class SetsAndMapsTester {
         var degrees = new Dictionary<string, int>();
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
-            // Todo Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3]; // The degree in the 4th column
+            // If the degree is not in the dictionary add it for the first time
+            if (!degrees.ContainsKey(degree)) {
+                degrees.Add(degree,1);
+            }
+            // If the degree is in the dictionary just increment the number
+            else {
+                int number = degrees[degree];
+                degrees[degree] = number + 1;
+            }
+            
         }
-
+        // return the dictionary
         return degrees;
     }
 
@@ -157,8 +188,57 @@ public static class SetsAndMapsTester {
     /// # Problem 3 #
     /// #############
     private static bool IsAnagram(string word1, string word2) {
-        // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        
+        // Dictionary to add char and number of ocurrences
+        var countChars = new Dictionary<char, int>();
+
+        // Lowercase the input
+        word1 = word1.ToLower();
+        word2 = word2.ToLower();
+
+        // Remove spaces
+        word1 = string.Join("", word1.Split(' '));
+        word2 = string.Join("", word2.Split(' '));
+
+        // Check length of input. If are different return false and end
+        if (word1.Length != word2.Length)
+            return false;
+        else {
+            // Loop the word1 and add the letter and ocurrences to the dictionary
+            foreach (char miChar in word1) {
+                // If the letter is not in Dictionary add it for the first time
+                if (!countChars.ContainsKey(miChar)) {
+                    countChars.Add(miChar,1);
+                } else {
+                    // If the letter is in dictionary only modify the number
+                    int number = countChars[miChar];
+                    countChars[miChar] = number + 1;
+                } 
+            }
+            // Loop the word2 and remove the ocurrences
+            foreach (char miChar in word2) {
+                if (countChars.ContainsKey(miChar)) {
+                    // check if is 1 to remove
+                    if (countChars[miChar] == 1) {
+                        // remove
+                        countChars.Remove(miChar);
+                    }
+                    else {
+                        // if more than one just substract 1
+                        countChars[miChar] = countChars[miChar] - 1;
+                    }
+                } else {
+                    // If the char is not found is not an anagram and return false
+                    return false;
+                } 
+            }
+        }
+        // If the number of elements in the dictionary is 0, the word is an anagram
+        if (countChars.Count == 0)
+            return true;
+        else 
+            return false;
+
     }
 
     /// <summary>
@@ -231,9 +311,13 @@ public static class SetsAndMapsTester {
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
-        // TODO:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+        // Print out each place a earthquake has happened today and its magitude.
+        foreach (var feature in featureCollection.Features)
+        {
+            double mag = feature.Properties.Mag;
+            string formattedMag = mag.ToString("0.00");
+
+            Console.WriteLine($"{feature.Properties.Place} - Mag {formattedMag}");
+        }    
     }
 }

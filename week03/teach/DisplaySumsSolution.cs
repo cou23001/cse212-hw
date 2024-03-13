@@ -44,5 +44,7 @@
             // Add this number to the values_seen set
             valuesSeen.Add(n);
         }
+        //string elementsAsString = string.Join(", ", valuesSeen);
+        //Console.WriteLine(elementsAsString);
     }
 }

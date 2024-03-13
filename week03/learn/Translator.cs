@@ -25,6 +25,8 @@ public class Translator
     public void AddWord(string fromWord, string toWord)
     {
         // ADD YOUR CODE HERE
+        Dictionary<string, string> _words = new Dictionary<string, string>();
+        _words.Add(fromWord,toWord);
     }
 
     /// <summary>
@@ -35,6 +37,11 @@ public class Translator
     public string Translate(string fromWord)
     {
         // ADD YOUR CODE HERE
-        return "";
+        var toWord = "???";
+        if (_words.ContainsKey(fromWord)) {
+            return _words[fromWord];
+        }
+        return toWord; 
+
     }
 }
