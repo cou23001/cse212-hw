@@ -28,6 +28,19 @@ public class LinkedList : IEnumerable<int> {
     /// </summary>
     public void InsertTail(int value) {
         // TODO Problem 1
+        // Create new node
+        Node newNode = new Node(value);
+        // If the list is empty, then point both head and tail to the new node.
+        if (_head is null) {
+            _head = newNode;
+            _tail = newNode;
+        }
+        // If the list is not empty, then only head will be affected.
+        else {
+            newNode.Prev = _tail; // Connect the next head to the new node
+            _tail.Next = newNode; // Connect new node to the previous head
+            _tail = newNode; // Update the head to point to the new node
+        }
     }
 
 
@@ -37,7 +50,7 @@ public class LinkedList : IEnumerable<int> {
     public void RemoveHead() {
         // If the list has only one item in it, then set head and tail 
         // to null resulting in an empty list.  This condition will also
-        // cover an empty list.  Its okay to set to null again.
+        // cover an empty list.  Its okay to set to null again.  
         if (_head == _tail) {
             _head = null;
             _tail = null;
@@ -55,7 +68,16 @@ public class LinkedList : IEnumerable<int> {
     /// Remove the last node (i.e. the tail) of the linked list.
     /// </summary>
     public void RemoveTail() {
-        // TODO Problem 2
+        // If the list has only one item in it, then set head and tail to null
+        if (_head == _tail) {
+            _head = null;
+            _tail = null;
+        }
+        // If the list has more than one item then remove the tail
+        else if (_head is not null) {
+            _tail.Prev.Next = null;
+            _tail = _tail.Prev;
+        }
     }
 
     /// <summary>
@@ -93,14 +115,52 @@ public class LinkedList : IEnumerable<int> {
     /// Remove the first node that contains 'value'.
     /// </summary>
     public void Remove(int value) {
-        // TODO Problem 3
+        // Check it the list is empty
+        if (_head == null) {
+            return;
+        }
+        
+        // Assign the current to the head of the list
+        var currentNode = _head;
+        while (currentNode != null) {
+            if (currentNode.Data == value) {
+                // Found the node with the specified value
+                if (currentNode == _head) {
+                    // If the node to be removed is the head
+                    RemoveHead();
+                } else if (currentNode.Next == null) {
+                    // If the node to be removed is the tail
+                    RemoveTail();
+                } else {
+                    // If the node to be removed is in the middle
+                    currentNode.Prev.Next = currentNode.Next;
+                    currentNode.Next.Prev = currentNode.Prev;
+                }
+                return; // Exit after removing the first occurrence
+            }
+            currentNode = currentNode.Next;
+        }
     }
 
     /// <summary>
     /// Search for all instances of 'oldValue' and replace the value to 'newValue'.
     /// </summary>
     public void Replace(int oldValue, int newValue) {
-        // TODO Problem 4
+        // Check if the list is empty
+        if (_head == null) {
+            return;
+        }
+        // Assign the current node at the beggining of the list
+        var currentNode = _head;
+        while (currentNode != null) {
+            // Check if the current value is equals the oldValue
+            if (currentNode.Data == oldValue) {
+                // If so, assign the newValue
+                currentNode.Data = newValue;
+            }
+            // Go to the next node
+            currentNode = currentNode.Next;
+        }
     }
 
     /// <summary>
@@ -126,8 +186,14 @@ public class LinkedList : IEnumerable<int> {
     /// Iterate backward through the Linked List
     /// </summary>
     public IEnumerable Reverse() {
-        // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        // Start at the end of the list
+        var curr = _tail;
+        while (curr is not null) {
+            // Return data of the node
+            yield return curr.Data;
+            // Go backwards in the list
+            curr = curr.Prev;
+        }
     }
 
     public override string ToString() {
