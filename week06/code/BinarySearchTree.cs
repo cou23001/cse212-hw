@@ -65,7 +65,15 @@ public class BinarySearchTree : IEnumerable<int> {
     }
 
     private void TraverseBackward(Node? node, List<int> values) {
-        // TODO Problem 3
+        // Check if it has elements
+        if (node is not null) {
+            // Recursive call to insert elements to the right
+            TraverseBackward(node.Right, values);
+            // Insert the value
+            values.Add(node.Data);
+            // Recursive call to insert elements to the left
+            TraverseBackward(node.Left, values);
+        }
     }
 
     /// <summary>
